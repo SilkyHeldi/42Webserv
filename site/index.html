@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload de fichier</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        html, body {
+            font-family: Arial, sans-serif;
+            background-image: linear-gradient(to right top, #0a0051, #0047a0, #0087c9, #00c5c2, #00ff9b);
+            background-size: cover;
+            padding: 20px;
+            margin: 0;
+            height: 100%;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        form {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        a {
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            background-color: #FFA500; /* Bright Orange */
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+		
+        a:hover {
+            background-color: #FF7F00; /* Darker shade of orange on hover */
+        }
+
+        input[type="submit"] {
+            background-color: #FFA500; /* Bright Orange */
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #FF7F00; /* Darker shade of orange on hover */
+        }
+
+        input[type="file"] {
+            background-color: #FFA500; /* Bright Orange */
+            color: #fff;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="file"]:hover {
+            background-color: #ff80008e; /* Darker shade of orange on hover */
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Upload de fichier</h1>
+    <form action="/cgi-bin/cgi_script.py" method="post" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <input type="submit" value="Envoyer">
+    </form>
+
+    <h1>Liste des fichiers</h1>
+    <ul>
+        <li><a href="downloads/fichier1.txt" download>Fichier 1</a></li>
+        <li><a href="downloads/fichier2.txt" download>Fichier 2</a></li>
+        <li><a href="downloads/fichier3.txt" download>Fichier 3</a></li>
+    </ul>
+    <select id="fileSelect">
+    <option value="delex1.txt">Fichier 1</option>
+    <option value="delex2.txt">Fichier 2</option>
+    <option value="delex3.txt">Fichier 3</option>
+    </select>
+    <button id="deleteButton">Supprimer le fichier</button> 
+    <script>
+      $(document).ready(function() {
+        $('#deleteButton').click(function() {
+          var selectedFile = $('#fileSelect').val();
+          $.ajax({
+            url: '/uploads/' + selectedFile,
+            type: 'DELETE',
+            success: function(response) {
+              // Gérer la réponse de la requête DELETE réussie ici
+              console.log('Fichier supprimé avec succès.');
+            },
+            error: function(error) {
+              // Gérer les erreurs de la requête DELETE ici
+              console.error('Une erreur s\'est produite lors de la suppression du fichier.', error);
+            }
+          });
+        });
+      });
+    </script>
+    <h1>Page de redirection</h1>
+    <p>Cliquez sur le bouton ci-dessous pour être redirigé :</p>
+    <button onclick="redirect()">Redirection</button>
+  
+    <script>
+      function redirect() {
+        var currentUrl = window.location.href;
+        var redirectUri = "redirect";
+        var newUrl = currentUrl + redirectUri;
+        window.location.href = newUrl;
+      }
+    </script>
+</body>
+</html>
